@@ -29,7 +29,7 @@ export async function createToken(username: string): Promise<string> {
   return jwt.sign(
     { username },
     secret,
-    { expiresIn: '7d' }
+    { expiresIn: '1h' }
   )
 }
 

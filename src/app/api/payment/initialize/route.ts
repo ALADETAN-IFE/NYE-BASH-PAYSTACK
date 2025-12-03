@@ -84,6 +84,8 @@ export async function POST(request: NextRequest) {
         amount: amountWithFees * 100, // Paystack expects amount in kobo (customer pays including fees)
         email,
         currency: 'NGN',
+        first_name: customerName.split(' ')[0] || customerName,
+        last_name: customerName.split(' ').slice(1).join(' ') || '',
         channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'], // Enable multiple payment channels
         callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/callback?reference=${reference}`,
         metadata: {
