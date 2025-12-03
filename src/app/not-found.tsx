@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Home, ArrowLeft, Calendar } from "lucide-react"
+import { Home, Calendar, SearchX } from "lucide-react"
 
 export default function NotFound() {
     return (
@@ -22,9 +22,9 @@ export default function NotFound() {
                     </p>
                 </div>
 
-                {/* Decoration */}
-                <div className="text-6xl mb-8 opacity-50">
-                    🎉
+                {/* Illustration */}
+                <div className="mb-8 flex justify-center animate-bounce">
+                    <SearchX className="h-24 w-24 text-muted-foreground/30" strokeWidth={1.5} />
                 </div>
 
                 {/* Action Buttons */}
