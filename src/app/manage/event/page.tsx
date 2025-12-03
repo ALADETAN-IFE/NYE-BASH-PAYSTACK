@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
+import { AlertDialog } from '@/components/ui/alert-dialog'
 import EventForm from '@/components/EventForm'
 import EventListItem from '@/components/EventListItem'
 import EventListSkeleton from '@/components/EventListSkeleton'
@@ -15,6 +16,14 @@ export default function ManageEventPage() {
     const [isEditing, setIsEditing] = useState(false)
     const [editingEvent, setEditingEvent] = useState<Event | null>(null)
     const [saving, setSaving] = useState(false)
+    const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; eventId: string | null }>({
+        open: false,
+        eventId: null,
+    })
+    const [errorDialog, setErrorDialog] = useState<{ open: boolean; message: string }>({
+        open: false,
+        message: '',
+    })
 
     useEffect(() => {
         fetchEvents()
@@ -32,14 +41,22 @@ export default function ManageEventPage() {
     }
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this event?')) return
+        setDeleteDialog({ open: true, eventId: id })
+    }
+
+    const confirmDelete = async () => {
+        if (!deleteDialog.eventId) return
 
         try {
-            await axios.delete(`/api/event?id=${id}`)
-            setEventList(eventList.filter(event => event.id !== id))
-        } catch (error) {
+            await axios.delete(`/api/event?id=${deleteDialog.eventId}1`)
+            setEventList(eventList.filter(event => event.id !== deleteDialog.eventId))
+        } catch (error: unknown) {
             console.error('Failed to delete event:', error)
-            alert('Failed to delete event')
+            const err = error as { response?: { data?: { error?: string } } } | undefined
+            setErrorDialog({
+                open: true,
+                message: 'Failed to delete event. Please try again.' + (err?.response?.data?.error ?? ''),
+            })
         }
     }
 
@@ -87,7 +104,10 @@ export default function ManageEventPage() {
             setEditingEvent(null)
         } catch (error) {
             console.error('Failed to save event:', error)
-            alert('Failed to save event')
+            setErrorDialog({
+                open: true,
+                message: 'Failed to save event. Please try again.',
+            })
         } finally {
             setSaving(false)
         }
@@ -165,6 +185,27 @@ export default function ManageEventPage() {
                     </div>
                 )}
             </div>
+
+            <AlertDialog
+                open={deleteDialog.open}
+                onOpenChange={(open) => setDeleteDialog({ open, eventId: null })}
+                title="Delete Event"
+                description="Are you sure you want to delete this event? This action cannot be undone and all associated data will be permanently removed."
+                onConfirm={confirmDelete}
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="destructive"
+            />
+
+            <AlertDialog
+                open={errorDialog.open}
+                onOpenChange={(open) => setErrorDialog({ open, message: '' })}
+                title="Error"
+                description={errorDialog.message}
+                onConfirm={() => setErrorDialog({ open: false, message: '' })}
+                confirmText="OK"
+                variant="destructive"
+            />
         </main>
     )
 }
