@@ -48,7 +48,7 @@ export default function ManageEventPage() {
         if (!deleteDialog.eventId) return
 
         try {
-            await axios.delete(`/api/event?id=${deleteDialog.eventId}1`)
+            await axios.delete(`/api/event?id=${deleteDialog.eventId}`)
             setEventList(eventList.filter(event => event.id !== deleteDialog.eventId))
         } catch (error: unknown) {
             console.error('Failed to delete event:', error)
@@ -102,11 +102,12 @@ export default function ManageEventPage() {
             await fetchEvents()
             setIsEditing(false)
             setEditingEvent(null)
-        } catch (error) {
+        } catch (error: unknown) {
             console.error('Failed to save event:', error)
+            const err = error as { response?: { data?: { error?: string } } } | undefined
             setErrorDialog({
                 open: true,
-                message: 'Failed to save event. Please try again.',
+                message: 'Failed to save event. Please try again.' + (err?.response?.data?.error ?? ''),
             })
         } finally {
             setSaving(false)
