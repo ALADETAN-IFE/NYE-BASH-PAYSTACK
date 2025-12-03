@@ -48,6 +48,11 @@ export async function POST(request: NextRequest) {
     // Calculate total amount
     const totalPrice = event.price * quantity;
 
+    // Calculate Paystack transaction fee (customer bears the cost)
+    // Paystack charges: 1.5% + NGN 100 (capped at NGN 2,000)
+    const transactionFee = Math.min(Math.ceil(totalPrice * 0.015) + 100, 2000);
+    const amountWithFees = totalPrice + transactionFee;
+
     // Generate unique reference
     const reference = `NYE-${Date.now()}-${Math.random()
       .toString(36)
@@ -76,7 +81,7 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify({
         reference,
-        amount: totalPrice * 100, // Paystack expects amount in kobo (smallest currency unit)
+        amount: amountWithFees * 100, // Paystack expects amount in kobo (customer pays including fees)
         email,
         currency: 'NGN',
         channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'], // Enable multiple payment channels
@@ -87,6 +92,8 @@ export async function POST(request: NextRequest) {
           eventId: event.id,
           eventTitle: event.title,
           quantity,
+          originalAmount: totalPrice,
+          transactionFee,
         },
       }),
     });
