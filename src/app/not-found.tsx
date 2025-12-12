@@ -6,6 +6,7 @@ export default function NotFound() {
     return (
         <div className="min-h-screen bg-background flex items-center justify-center p-4">
             <div className="max-w-2xl w-full text-center">
+                
                 {/* 404 Number */}
                 <div className="mb-8">
                     <h1 className="text-9xl font-bold text-primary">404</h1>
