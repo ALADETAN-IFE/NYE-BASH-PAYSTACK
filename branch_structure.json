@@ -1,0 +1,33 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "main",
+    "origin",
+    "repoguard/fixes-1781318975825",
+    "repoguard/fixes-1781875556877",
+    "repoguard/fixes-1785447384857",
+    "repoguard/fixes-1790945103495",
+    "repoguard/fixes-1791605236189",
+    "vercel/react-server-components-cve-vu-taqntr"
+  ],
+  "parent": {
+    "main": null,
+    "origin": "main",
+    "repoguard/fixes-1781318975825": "main",
+    "repoguard/fixes-1781875556877": "main",
+    "repoguard/fixes-1785447384857": "main",
+    "repoguard/fixes-1790945103495": "main",
+    "repoguard/fixes-1791605236189": "main",
+    "vercel/react-server-components-cve-vu-taqntr": "main"
+  },
+  "order": [
+    "main",
+    "origin",
+    "repoguard/fixes-1781318975825",
+    "repoguard/fixes-1781875556877",
+    "repoguard/fixes-1785447384857",
+    "repoguard/fixes-1790945103495",
+    "repoguard/fixes-1791605236189",
+    "vercel/react-server-components-cve-vu-taqntr"
+  ]
+}
